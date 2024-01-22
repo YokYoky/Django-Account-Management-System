@@ -1,0 +1,115 @@
+{% extends "accounts/base.html" %}
+{% block body %}
+    <h3 class="m-4">Search Results</h3>
+    <div class="row">
+        <div class="col-12">
+            {% if accounts %}
+                <div class="card bg-light ms-4 me-4 mb-4">
+                    <div class="card-header">
+                        <i class="fa-solid fa-list"></i> Search Results
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <th scope="col">Account Number</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">First Name</th>
+                                        <th scope="col">Last Name</th>
+                                        <th scope="col">Sex</th>
+                                        <th scope="col">Residence</th>
+                                        <th scope="col">Actions</th>
+                                    </thead>
+                                    <tbody>
+                                        {% for account in accounts %}
+                                            <tr>
+                                                <td>{{ account.account_number }}</td>
+                                                <td>{{ account.email }}</td>
+                                                <td>{{ account.first_name }}</td>
+                                                <td>{{ account.last_name }}</td>
+                                                <td>{{ account.get_sex_display }}</td>
+                                                <td>{{ account.residence }}</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-success me-1" href="{% url 'view_account' account.id}" data-bs-toggle="modal" data-bs-target="#myModal{{account.id}}">
+                                                        <i class="fa-solid fa-circle-info"></i>
+                                                    </button>
+                
+                                                    <!--View Account in modal-->
+                                                    <div class="modal" id="myModal{{account.id}}" tabindex="-1" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                          <div class="modal-content">
+                                                            <div class="modal-header">
+                                                              <h5 class="modal-title">
+                                                                Account: {{account.first_name}} {{account.last_name}}
+                                                              </h5>
+                                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true"></span>
+                                                              </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                              <ul class="list-unstyled">
+                                                                <li>Account Number: <strong>{{account.account_number}}</strong></li>
+                                                                <li>Email: <strong>{{account.email}}</strong></li>
+                                                                <li>First Name: <strong>{{account.first_name}}</strong></li>
+                                                                <li>Last Name: <strong>{{account.last_name}}</strong></li>
+                                                                <li>Sex: <strong>{{account.get_sex_display}}</strong></li>
+                                                                <li>Residence: <strong>{{account.residence}}</strong></li>
+                                                              </ul>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                              <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                
+                                                      <!--Update Account-->
+                                                      <a class="btn btn-warning me-1" href="{% url 'update' account.id %}">
+                                                        <i class="fa-solid fa-pen-to-square"></i>
+                                                      </a>
+                                                      
+                                                      
+                                                      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete{{account.id}}">
+                                                        <i class="fa-solid fa-trash-can fa-lg"></i>
+                                                      </button>
+                                                      <!--Delete in modal-->
+                                                      <div class="modal" id="delete{{account.id}}" tabindex="-1" aria-labelledby="myModalLabel2" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                          <div class="modal-content">
+                                                            <div class="modal-header">
+                                                              <h5 class="modal-title">
+                                                                Account: {{ account.first_name }} {{ account.last_name }}
+                                                              </h5>
+                                                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                                                <span aria-hidden="true"></span>
+                                                              </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                              <p>Are you sure you want to delete this account?</p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                              <form action="{% url 'delete' account.id %}" method="POST">
+                                                                {% csrf_token %}
+                                                                <input type="submit" class="btn btn-primary" value="Delete">
+                                                              </form>
+                                                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </p>
+                    </div>
+                </div>
+            {% else %}
+                <h5 class="alert alert-primary ms-4 me-4">No matching results</h5>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
