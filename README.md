@@ -3,6 +3,7 @@
 Basic CRUD operations in Django
 
 **Frontend:** HTML, Bootstrap
+
 **Backend:** Django
 
 
